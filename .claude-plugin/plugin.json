@@ -1,0 +1,8 @@
+{
+  "name": "quiet-build-skills",
+  "description": "Reusable AI-agent skills maintained by quiet-build.",
+  "version": "0.1.0",
+  "skills": [
+    "./skills/engineering/rebase-and-verify"
+  ]
+}
