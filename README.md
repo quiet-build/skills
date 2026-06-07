@@ -4,24 +4,42 @@ Reusable [Agent Skills](https://agentskills.io) for AI coding agents (Claude Cod
 
 Each skill is a self-contained `SKILL.md` that teaches an agent a proven, repeatable workflow. They install in seconds and work across projects.
 
-## Install
+> **Prerequisite:** [Node.js](https://nodejs.org) (for `npx`) if you use the CLI installer. The manual method needs only `git`.
 
-Install all skills (or pick the ones you want) with the [`skills`](https://skills.sh) installer — no clone required:
+## Install via CLI (recommended)
+
+Install with the [`skills`](https://skills.sh) installer — no clone required. It drops each skill into your agent's skills directory (e.g. `~/.claude/skills/` for Claude Code), where it's auto-discovered.
 
 ```bash
+# Interactive — pick which skills and which agents
 npx skills@latest add quiet-build/skills
+
+# Just one skill, into Claude Code, no prompts
+npx skills@latest add quiet-build/skills --skill rebase-and-verify --agent claude-code -y
+
+# Everything, into every detected agent
+npx skills@latest add quiet-build/skills --all
 ```
 
-You'll be prompted to choose which skills and which agents to install into. The installer drops each skill into your agent's skills directory (e.g. `~/.claude/skills/` for Claude Code), where it's auto-discovered.
+Other handy commands:
 
-### Manual install
+```bash
+npx skills@latest add quiet-build/skills --list   # preview skills without installing
+npx skills@latest use quiet-build/skills@rebase-and-verify   # try a skill without installing it
+npx skills@latest update                          # pull the latest version of installed skills
+```
 
-Prefer to copy by hand? Each skill is just a folder:
+## Install manually
+
+Each skill is a self-contained folder — copy it into your agent's skills directory:
 
 ```bash
 git clone https://github.com/quiet-build/skills.git
-cp -r skills/skills/engineering/rebase-and-verify ~/.claude/skills/
+cd skills
+cp -r skills/engineering/rebase-and-verify ~/.claude/skills/
 ```
+
+> Note the nested path: the repo is named `skills`, and skills live under its `skills/<category>/` directory — hence `skills/engineering/rebase-and-verify` after `cd skills`.
 
 ## Available skills
 
