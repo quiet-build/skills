@@ -1,6 +1,6 @@
 ---
 name: rebase-and-verify
-description: Use when rebasing the current branch onto another branch (main/develop/etc.) and needing conflicts resolved without breaking lint, type checks, unit tests, or e2e tests — then independently reviewed. Triggers on "rebase onto main", "rebase to latest", "rebase and resolve conflicts", "catch up with main", "sync my feature branch with main", "my branch is behind main", "main moved, update my PR branch".
+description: Use when rebasing the current branch onto another branch (main/develop/etc.) and needing conflicts resolved without breaking lint, type checks, unit tests, or e2e tests — then independently reviewed. Pass --simple (alias --fast) for a quick low-risk rebase that runs lint/eslint only and skips type checks, unit/e2e tests, and the independent review. Triggers on "rebase onto main", "rebase to latest", "rebase and resolve conflicts", "catch up with main", "sync my feature branch with main", "my branch is behind main", "main moved, update my PR branch".
 ---
 
 # Rebase and Verify
@@ -10,6 +10,20 @@ description: Use when rebasing the current branch onto another branch (main/deve
 Rebasing onto a moving target branch is not done when the rebase command exits cleanly. It is done when **conflicts are resolved by intent, every quality gate still passes, and an independent reviewer confirms the branch's own functionality survived.**
 
 Core principle: **a green `git rebase` says the patches applied — it says nothing about whether the code still works.** Conflict markers can vanish while the merged result is logically wrong. Treat the rebase as untrusted until gates pass and a reviewer signs off.
+
+## Modes
+
+| Mode | Flag | Gates | Independent review | Use when |
+|------|------|-------|--------------------|----------|
+| **Full** (default) | _(none)_ | Lint + types + unit + e2e | Yes | Default. Any non-trivial rebase, or conflicts that touched source logic. |
+| **Simple** | `--simple` (alias `--fast`) | **Lint/eslint only** | Skipped | Low-risk rebase you want quickly — few/no conflicts, or conflicts limited to imports/lockfiles/formatting. |
+
+`--simple` keeps every **safety** step (pre-flight, backup branch, shared-branch check, conflict resolution by intent) — those are cheap and never skipped. It only drops the slow verification: type checks, unit tests, e2e tests, and the independent review. The lint/eslint gate stays because it is fast and catches the most common post-rebase breakage.
+
+**Simple mode is a deliberate trade of safety for speed.** It does NOT prove the branch's own features still work. Two rules:
+
+- **Loudly disclose** in the final report that you ran in simple mode and list every gate that was skipped.
+- If conflict resolution touched **real source logic** (not just imports, lockfiles, or formatting), **stop and recommend full mode** — that is exactly the case where skipping tests and review is dangerous. Proceed in simple mode only if the user confirms.
 
 ## When to Use
 
@@ -167,6 +181,8 @@ Use the repo's existing package manager and lockfile format.
 
 ## 6. Run quality gates
 
+> **Simple mode (`--simple` / `--fast`):** run the **Lint** row only, then skip the rest of this table and step 7 entirely. Still detect the project's real lint command (do not assume `npm run lint`). If no lint command exists at all, say so — there is no fast gate to run, and you should recommend full mode.
+
 Detect the project's actual commands — **do not assume npm.** Check: `package.json`, `Makefile`, `justfile`, `pyproject.toml`, `Cargo.toml`, `go.mod`, `.github/workflows`, existing CI scripts.
 
 Run whatever exists, in this order:
@@ -198,6 +214,8 @@ A gate failure after rebase is a **real signal** — fix the root cause. Do NOT:
 If a failure looks unrelated to the rebase, **verify before calling it pre-existing**: check target-branch CI if available, or temporarily test the exact `TARGET_SHA` if practical.
 
 ## 7. Independent review
+
+> **Simple mode (`--simple` / `--fast`):** skip this step. Note the skipped review in the final report.
 
 Get a fresh review from a context that did **not** perform the merge. Use whichever mechanism is available:
 
@@ -235,6 +253,7 @@ Tell the user:
 - Quality gates run, with exact commands and results
 - Independent review verdict
 - Whether any gates were skipped, and why
+- **If simple mode:** state `Mode: simple` explicitly and list every skipped gate (type checks, unit tests, e2e tests, independent review) so the user knows verification was partial
 
 Do not force-push unless the user explicitly asks. If pushing rewritten history, use only:
 

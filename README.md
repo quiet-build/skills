@@ -45,7 +45,7 @@ cp -r skills/engineering/rebase-and-verify ~/.claude/skills/
 
 | Skill | Category | What it does |
 |-------|----------|--------------|
-| [`rebase-and-verify`](skills/engineering/rebase-and-verify/SKILL.md) | engineering | Rebase a branch onto a moving target, resolve conflicts **by intent**, run every quality gate (lint, types, unit, e2e), and get an independent review before declaring it done. |
+| [`rebase-and-verify`](skills/engineering/rebase-and-verify/SKILL.md) | engineering | Rebase a branch onto a moving target, resolve conflicts **by intent**, run every quality gate (lint, types, unit, e2e), and get an independent review before declaring it done. Pass `--simple` (alias `--fast`) for a quick low-risk rebase that runs lint/eslint only and skips type checks, unit/e2e tests, and the review. |
 
 ## Repository layout
 
