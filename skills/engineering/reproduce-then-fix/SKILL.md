@@ -1,6 +1,6 @@
 ---
 name: reproduce-then-fix
-description: Use when fixing a bug, defect, regression, or "this is broken / behaves wrong" report and you want a verified fix — not a guess. Enforces: write a failing test that reproduces the bug first, confirm it fails, find the root cause, fix it, run the FULL suite after each change, and commit only when the repro passes with zero new regressions. Triggers on "fix this bug", "this is broken", "reproduce the bug", "why does X fail", "fix the regression", "make a failing test for this".
+description: 'Use when fixing a bug, defect, regression, or a "this is broken / behaves wrong" report and you want a verified fix rather than a guess. Enforces writing a failing test that reproduces the bug first, confirming it fails, finding the root cause, fixing it, running the FULL suite after each change, and committing only when the repro passes with zero new regressions. Triggers on "fix this bug", "this is broken", "reproduce the bug", "why does X fail", "fix the regression", "make a failing test for this".'
 ---
 
 # Reproduce Then Fix
