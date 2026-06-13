@@ -1,8 +1,9 @@
 {
   "name": "quiet-build-skills",
   "description": "Reusable AI-agent skills maintained by quiet-build.",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "skills": [
-    "./skills/engineering/rebase-and-verify"
+    "./skills/engineering/rebase-and-verify",
+    "./skills/engineering/reproduce-then-fix"
   ]
 }
